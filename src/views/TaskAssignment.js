@@ -1,23 +1,49 @@
 import React, { useState } from 'react';
 import './styles/TaskAssignment.css';
 
-const TaskAssignment = ({ workers, tasks, addTask, deleteTask }) => {
+const TaskAssignment = ({ workers, tasks, addTask, updateTask, deleteTask }) => {
   const [selectedWorker, setSelectedWorker] = useState('');
   const [newTask, setNewTask] = useState('');
+  const [isEditing, setIsEditing] = useState(false); // Track if editing a task
+  const [currentTaskIndex, setCurrentTaskIndex] = useState(null); // Track index of task being edited
 
+  // Handle worker selection change
   const handleWorkerChange = (e) => {
     setSelectedWorker(e.target.value);
+    resetTaskForm();
   };
 
+  // Handle new task input change
   const handleNewTaskChange = (e) => {
     setNewTask(e.target.value);
   };
 
-  const handleAddTask = () => {
+  // Handle add or update task
+  const handleSaveTask = () => {
     if (newTask && selectedWorker) {
-      addTask(selectedWorker, newTask);
-      setNewTask('');
+      if (isEditing) {
+        // Update existing task
+        updateTask(selectedWorker, currentTaskIndex, newTask);
+      } else {
+        // Add new task
+        addTask(selectedWorker, newTask);
+      }
+      resetTaskForm();
     }
+  };
+
+  // Reset task input form
+  const resetTaskForm = () => {
+    setNewTask('');
+    setIsEditing(false);
+    setCurrentTaskIndex(null);
+  };
+
+  // Handle edit task
+  const handleEditTask = (task, index) => {
+    setNewTask(task);
+    setIsEditing(true);
+    setCurrentTaskIndex(index);
   };
 
   return (
@@ -26,8 +52,8 @@ const TaskAssignment = ({ workers, tasks, addTask, deleteTask }) => {
       <div className="dropdown-container">
         <select value={selectedWorker} onChange={handleWorkerChange}>
           <option value="" disabled>Select a Worker</option>
-          {workers.map((worker, index) => (
-            <option key={index} value={`${worker.firstName} ${worker.lastName}`}>
+          {workers.map((worker) => (
+            <option key={worker.id} value={`${worker.firstName} ${worker.lastName}`}>
               {worker.firstName} {worker.lastName}
             </option>
           ))}
@@ -41,7 +67,9 @@ const TaskAssignment = ({ workers, tasks, addTask, deleteTask }) => {
             onChange={handleNewTaskChange}
             placeholder="Enter new task"
           />
-          <button onClick={handleAddTask}>Add Task</button>
+          <button onClick={handleSaveTask}>
+            {isEditing ? 'Update Task' : 'Add Task'}
+          </button>
         </div>
       )}
       {selectedWorker && tasks[selectedWorker] && (
@@ -51,6 +79,7 @@ const TaskAssignment = ({ workers, tasks, addTask, deleteTask }) => {
             {tasks[selectedWorker].map((task, index) => (
               <li key={index}>
                 {task}
+                <button onClick={() => handleEditTask(task, index)}>Edit</button>
                 <button onClick={() => deleteTask(selectedWorker, index)}>Delete</button>
               </li>
             ))}
