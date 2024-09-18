@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import './App.css';
 import Supervisor from './views/supervisor';
 import TaskAssignment from './views/TaskAssignment';
+import ReportView from './views/ReportView';  // Import ReportView
 import Navbar from './components/Navbar/Navbar';
 import { v4 as uuidv4 } from 'uuid';  // Import uuid library
 
@@ -60,9 +61,6 @@ function App() {
       ),
     }));
   };
-  
-  
-
 
   return (
     <div>
@@ -79,24 +77,24 @@ function App() {
         />
       )}
 
-{currentView === 'tasks' && (
-    <TaskAssignment
-      workers={workers}
-      tasks={tasks}
-      addTask={addTask}
-      deleteTask={deleteTask}
-      updateTask={updateTask} // Pass update function here
-    />
-  )}
+      {currentView === 'tasks' && (
+        <TaskAssignment
+          workers={workers}
+          tasks={tasks}
+          addTask={addTask}
+          deleteTask={deleteTask}
+          updateTask={updateTask} // Pass update function here
+        />
+      )}
 
+      {currentView === 'reports' && (
+        <ReportView
+          workers={workers}  // Pass workers as prop to ReportView
+          tasks={tasks}  // Pass tasks to ReportView (optional)
+        />
+      )}
     </div>
-
-
-
-);
-
-
-
+  );
 }
 
 export default App;

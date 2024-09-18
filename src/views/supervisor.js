@@ -41,7 +41,7 @@ const Supervisor = ({ workers, addWorker, updateWorker, deleteWorker }) => {
 
   return (
     <div className="supervisor-container">
-      <h1>Supervisor View</h1>
+      <h1> Employee Manager </h1>
       <div className="input-container">
         <input
           type="text"

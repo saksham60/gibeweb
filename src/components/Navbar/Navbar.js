@@ -2,6 +2,7 @@
 
 import React from 'react';
 import './Navbar.css'; 
+
 const Navbar = ({ onNavigate }) => {
   return (
     <nav className="navbar">
@@ -9,11 +10,10 @@ const Navbar = ({ onNavigate }) => {
       <ul className="navbar-menu">
         <li className="navbar-item" onClick={() => onNavigate('supervisor')}>Supervisor</li>
         <li className="navbar-item" onClick={() => onNavigate('tasks')}>Task Assignment</li>
+        <li className="navbar-item" onClick={() => onNavigate('reports')}>Reports</li> {/* Added Reports navigation */}
       </ul>
     </nav>
   );
 };
 
 export default Navbar;
-
-
